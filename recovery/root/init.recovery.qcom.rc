@@ -1,6 +1,6 @@
 # Copyright (c) 2009-2012, 2014-2015, The Linux Foundation. All rights reserved.
-#
 # Copyright (C) 2020-2021 The OrangeFox Recovery Project
+#
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -29,14 +29,12 @@
 
 import /init.recovery.qcom_decrypt.rc
 
-on fs
-    chown system system /sys/bus/i2c/drivers/aw8624_haptic/1-005a/f0_save
-    chown system system /sys/bus/i2c/drivers/aw8624_haptic/1-005a/osc_save
-    wait /dev/block/platform/soc/${ro.boot.bootdevice}
-    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
-
-on init
-    start vibrator-service
+service vendor.qti.vibrator /system/bin/vendor.qti.hardware.vibrator.service
+    user root
+    group root
+    disabled
+    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
+    seclabel u:r:recovery:s0
 
 service unified-script /system/bin/unified-script.sh
     user root
@@ -45,13 +43,18 @@ service unified-script /system/bin/unified-script.sh
     oneshot
     seclabel u:r:recovery:s0
 
+on fs
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    chown system system /sys/bus/i2c/drivers/aw8624_haptic/2-005a/f0_save
+    chown system system /sys/bus/i2c/drivers/aw8624_haptic/2-005a/osc_save
+    chown system system /sys/bus/i2c/drivers/aw8624_haptic/2-005a/custom_wave
+    chmod 0666  /sys/bus/i2c/drivers/aw8624_haptic/2-005a/custom_wave
+
 on boot
     chmod 0777 /system/bin/unified-script.sh
     start unified-script
-
-service vibrator-service /system/bin/vendor.qti.hardware.vibrator@1.2-service
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-#
+    start health-hal-2-1
+    start vendor.qti.vibrator
+    start vibratorfeature-hal-1-0
+    setprop sys.usb.config adb

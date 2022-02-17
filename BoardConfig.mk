@@ -151,8 +151,8 @@ TW_INCLUDE_CRYPTO_FBE := true
 TW_INCLUDE_FBE_METADATA_DECRYPT := true
 BOARD_USES_METADATA_PARTITION := true
 
-# haptics
-TW_SUPPORT_INPUT_1_2_HAPTICS := true
+# Haptics
+TW_SUPPORT_INPUT_AIDL_HAPTICS := true
 
 # TWRP specific build flags
 TW_THEME := portrait_hdpi
