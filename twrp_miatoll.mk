@@ -16,26 +16,23 @@
 # limitations under the License.
 #
 
-# Release name
-PRODUCT_RELEASE_NAME := miatoll
-DEVICE_PATH := device/xiaomi/miatoll
-
-$(call inherit-product, device/xiaomi/miatoll/device.mk)
+# Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
 
 # Inherit from our custom product configuration
-$(call inherit-product, vendor/omni/config/common.mk)
+$(call inherit-product, vendor/twrp/config/common.mk)
 
-#PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(LOCAL_PATH)/recovery/root,recovery/root)
+# Inherit from miatoll device
+$(call inherit-product, device/xiaomi/miatoll/device.mk)
 
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := miatoll
-PRODUCT_NAME := omni_miatoll
-PRODUCT_BRAND := Xiaomi
+PRODUCT_NAME := twrp_miatoll
+PRODUCT_BRAND := xiaomi
 PRODUCT_MODEL := Redmi Note 9S
-PRODUCT_MANUFACTURER := Xiaomi
+PRODUCT_MANUFACTURER := xiaomi
 
 # HACK: Set vendor patch level
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.build.security_patch=2099-12-31
-#
+	ro.vendor.build.security_patch=2099-12-31
+
