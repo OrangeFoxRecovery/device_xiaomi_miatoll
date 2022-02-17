@@ -16,6 +16,8 @@
 # limitations under the License.
 #
 
+DEVICE_PATH := device/xiaomi/miatoll
+
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-2a
